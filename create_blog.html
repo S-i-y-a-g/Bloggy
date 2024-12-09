@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Blog</title>
+    <link rel="stylesheet" href="create_blog_css.css">
+</head>
+<body>
+    <header>
+        <h1>Create Your Blog Post</h1>
+    </header>
+
+    <main>
+        <form id="blogForm">
+            <label for="username">User Name:</label>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="title">Blog Title:</label>
+            <input type="text" id="title" name="title" required><br><br>
+
+            <label for="content">Blog Content:</label>
+            <textarea id="content" name="content" rows="10" required></textarea><br><br>
+
+            <button type="submit">Create Blog</button>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById('blogForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); 
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const username = document.getElementById('username').value;
+
+            if (!title || !content) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/create-blog', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,  
+                        title: title,
+                        content: content
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    alert('Blog created successfully!');
+                    document.getElementById('blogForm').reset();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="homepage_css.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Blog</h1>
+        <p>Your daily dose of articles on technology, lifestyle, and more!</p>
+    </header>
+
+    <nav>
+        <a href="/click">Create Your Blog</a> 
+    </nav>
+
+    <div class="container">
+        <div class="recent-posts">
+            <h2>Recent Posts</h2>
+            <div id="recentBlogs"></div>
+        </div>
+    </div>
+
+    <script>
+      
+async function fetchRecentBlogs() {
+    const response = await fetch("/recent-blogs");
+    const blogs = await response.json();
+    const blogContainer = document.getElementById("recentBlogs");
+
+    blogs.forEach(blog => {
+        const blogElement = document.createElement("div");
+        blogElement.classList.add("post");
+        blogElement.innerHTML = `
+            <h3>${blog.title}</h3>
+            <p><strong>By: ${blog.username}</strong> | ${new Date(blog.time).toLocaleString()}</p>
+            <p>${blog.content}</p>
+        `;
+        blogContainer.appendChild(blogElement);
+    });
+}
+
+fetchRecentBlogs();
+
+    </script>
+</body>
+</html>
